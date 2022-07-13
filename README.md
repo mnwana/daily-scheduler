@@ -9,6 +9,7 @@ A personal scheduler to track daily appointments.
 * Bootstrap
 * Javascript
 * JQuery
+* MomentJS
 
 ## Website
 [https://mnwana.github.io/daily-scheduler/](https://mnwana.github.io/daily-scheduler/)

@@ -4,8 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css"
+    />
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -27,20 +33,32 @@
       <p id="currentDay" class="lead"></p>
     </header>
     <div class="container">
-      <div class="time-block row col-12 mb-0 pt-1">
-        <p class="col-2 border-top border-right mb-0 border-3 border-grey rounded-0">9AM</p>
-        <p class="description col-9 present mb-0 mr-0">Feed the cat & plants</p>
-        <button class="saveBtn col-1">
+      <ol id="schedule">
+        <li class="time-block row col-12 mb-0 pt-1">
+          <span
+            class="col-2 border-top border-right mb-0 border-3 border-grey rounded-0 hour"
+          >
+            9AM
+        </span>
+          <p class="description col-9 present mb-0 mr-0">
+            Feed the cat & plants
+          </p>
+          <button class="saveBtn col-1">
             <span class="oi oi-hard-drive"></span>
-        </button>
-      </div>
-      <div class="time-block row col-12 mb-0 pt-1">
-        <p class="col-2 border-top border-right mb-0 border-3 border-grey rounded-0">10AM</p>
-        <p class="description col-9 present mb-0 mr-0">Start studying</p>
-        <button class="saveBtn col-1">
+          </button>
+        </li>
+        <li class="time-block row col-12 mb-0 pt-1">
+          <span
+            class="col-2 border-top border-right mb-0 border-3 border-grey rounded-0 hour"
+          >
+            10AM
+        </span>
+          <p class="description col-9 present mb-0 mr-0">Start studying</p>
+          <button class="saveBtn col-1">
             <span class="oi oi-hard-drive"></span>
-        </button>
-      </div>
+          </button>
+        </li>
+      </ol>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
