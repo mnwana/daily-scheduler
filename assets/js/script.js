@@ -20,7 +20,7 @@ var loadEvents = function () {
 
 var saveEvents = function () {
   // save events to local storage location
-  localStorage.setItem("events", events);
+  localStorage.setItem("events", JSON.stringify(events));
 };
 
 var createEvent = function (eventHour, eventText) {
@@ -50,9 +50,6 @@ var setEventStatus = function (eventLi) {
   var hour = $(eventLi).find("span").text().trim();
   var time = moment(currDate, "L").set("hour", hour);
 
-  console.log("current time: " +currDate);
-  console.log("event time: " +time);
-  console.log("time diff: "+ moment().diff(time, "minutes"))
   // remove event status classes
   var eventLiP = $(eventLi).find("p");
   eventLiP.removeClass("present future past");
@@ -61,7 +58,7 @@ var setEventStatus = function (eventLi) {
     $(eventLiP).addClass("future");
   }
   // else if event is in past hours add past class (grey)
-  else if (moment().diff(time, "minutes") > 60) {
+  else if (moment().diff(time, "minutes") >= 60) {
     $(eventLiP).addClass("past");
   }
   //else event is in present hour add present class (red)
@@ -69,6 +66,24 @@ var setEventStatus = function (eventLi) {
     $(eventLiP).addClass("present");
   }
 };
+
+$("#schedule").on("click", "p", function () {
+    console.log("clicked");
+    var text = $(this).text().trim();
+    var textInput = $("<textarea>").addClass("form-control col-9").val(text);
+    $(this).replaceWith(textInput);
+    textInput.trigger("focus");
+  });
+
+  $("#schedule").on("blur", "textarea", function () {
+    var text = $(this).val().trim();
+    var index = $(this).closest(".time-block").index();
+    events[index].text = text;
+    saveEvents();
+    var eventP = $("<p>").addClass("description col-9 mb-0 mr-0").text(text);
+    $(this).replaceWith(eventP);
+    setEventStatus($(eventP).closest(".time-block"));
+  });
 
 // load schedule to initialize page
 loadEvents();
