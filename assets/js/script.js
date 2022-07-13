@@ -7,12 +7,12 @@ var loadEvents = function () {
   if (!events) {
     events = [];
     for (var i = 0; i < 24; i++) {
-      events.push("");
+      events.push("test text");
     }
   }
   // loop over array to populate schedule between 9 am and 5 pm
   for (var i = 0; i < events.length; i++) {
-    if (i > 8 && i < 18) {
+    if (i >= 0 && i < 18) {
       createEvent(i, events[i]);
     }
   }
@@ -25,7 +25,7 @@ var saveEvents = function () {
 
 var createEvent = function (eventHour, eventText) {
   // create elements that make up an event item
-  var eventLi = $("<li>").addClass("list-group-item");
+  var eventLi = $("<li>").addClass("time-block row col-12 mb-0 pt-1");
   var eventSpan = $("<span>")
     .addClass(
       "col-2 border-top border-right mb-0 border-3 border-grey rounded-0 hour"
@@ -33,21 +33,41 @@ var createEvent = function (eventHour, eventText) {
     .text(eventHour);
   var eventP = $("<p>").addClass("description col-9 mb-0 mr-0").text(eventText);
   var eventBtn = $("<button>").addClass("saveBtn col-1");
-  var eventBtnSpan = $("<span>").addClass("saveBtn col-1");
+  var eventBtnSpan = $("<span>").addClass("oi oi-hard-drive");
   //   append button span to button
   // append hour p, and description p, and button element to parent
   eventBtn.append(eventBtnSpan);
   eventLi.append(eventSpan, eventP, eventBtn);
   // set color of event based on current time
-    setEventStatus(eventHour,eventLi);
+    setEventStatus(eventLi);
+  // append to ul list on the page
+  $("#schedule").append(eventLi);
 };
 
-var setEventStatus = function (eventHour,eventLi) {
-  // get time of event
+var setEventStatus = function (eventLi) {
+  // get hour of event
+  var currDate = moment();
+  var hour = $(eventLi).find("span").text().trim();
+  var time = moment(currDate, "L").set("hour", hour);
+
+  console.log("current time: " +currDate);
+  console.log("event time: " +time);
+  console.log("time diff: "+ moment().diff(time, "minutes"))
   // remove event status classes
-  // if event is in past hours, add past class
-  // else if event is in present hour add present class
-  //else if event is in future hour add future class
+  var eventLiP = $(eventLi).find("p");
+  eventLiP.removeClass("present future past");
+  // if event is in future hours, add future class (green)
+  if (moment().diff(time, "minutes") <0) {
+    $(eventLiP).addClass("future");
+  }
+  // else if event is in past hours add past class (grey)
+  else if (moment().diff(time, "minutes") > 60) {
+    $(eventLiP).addClass("past");
+  }
+  //else event is in present hour add present class (red)
+  else {
+    $(eventLiP).addClass("present");
+  }
 };
 
 // load schedule to initialize page
