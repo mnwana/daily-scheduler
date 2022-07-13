@@ -7,7 +7,7 @@ var loadEvents = function () {
   if (!events) {
     events = [];
     for (var i = 0; i < 24; i++) {
-      events.push("test text");
+      events.push("");
     }
   }
   // loop over array to populate schedule between 9 am and 5 pm
@@ -39,7 +39,7 @@ var createEvent = function (eventHour, eventText) {
   eventBtn.append(eventBtnSpan);
   eventLi.append(eventSpan, eventP, eventBtn);
   // set color of event based on current time
-    setEventStatus(eventLi);
+  setEventStatus(eventLi);
   // append to ul list on the page
   $("#schedule").append(eventLi);
 };
@@ -54,7 +54,7 @@ var setEventStatus = function (eventLi) {
   var eventLiP = $(eventLi).find("p");
   eventLiP.removeClass("present future past");
   // if event is in future hours, add future class (green)
-  if (moment().diff(time, "minutes") <0) {
+  if (moment().diff(time, "minutes") < 0) {
     $(eventLiP).addClass("future");
   }
   // else if event is in past hours add past class (grey)
@@ -67,23 +67,32 @@ var setEventStatus = function (eventLi) {
   }
 };
 
+// on event text p click, open text area
 $("#schedule").on("click", "p", function () {
-    console.log("clicked");
-    var text = $(this).text().trim();
-    var textInput = $("<textarea>").addClass("form-control col-9").val(text);
-    $(this).replaceWith(textInput);
-    textInput.trigger("focus");
-  });
+  var text = $(this).text().trim();
+  var textInput = $("<textarea>").addClass("form-control col-9").val(text);
+  $(this).replaceWith(textInput);
+  textInput.trigger("focus");
+});
 
-  $("#schedule").on("blur", "textarea", function () {
-    var text = $(this).val().trim();
-    var index = $(this).closest(".time-block").index();
-    events[index].text = text;
-    saveEvents();
-    var eventP = $("<p>").addClass("description col-9 mb-0 mr-0").text(text);
-    $(this).replaceWith(eventP);
-    setEventStatus($(eventP).closest(".time-block"));
-  });
+//   on blurring event text text area, revert back to p
+$("#schedule").on("blur", "textarea", function () {
+  var text = $(this).val().trim();
+  var index = $(this).closest(".time-block").index();
+  events[index].text = text;
+  saveEvents();
+  var eventP = $("<p>").addClass("description col-9 mb-0 mr-0").text(text);
+  $(this).replaceWith(eventP);
+  setEventStatus($(eventP).closest(".time-block"));
+});
+
+// on save button click, save task to local storage
+$("#schedule").on("click", ".saveBtn", function () {
+  var index = $(this).closest(".time-block").index();
+  var text =  $(this).siblings("p").text();
+  events[index]=text;
+  saveEvents();
+});
 
 // load schedule to initialize page
 loadEvents();
