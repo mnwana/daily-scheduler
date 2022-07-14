@@ -48,7 +48,8 @@ textarea {
 /* event text styling */
 
 .description {
-  white-space: pre-wrap;
+  /* white-space: normal; */
+  z-index: 1;
 }
 
 .past {

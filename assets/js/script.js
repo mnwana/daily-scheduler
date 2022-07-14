@@ -34,7 +34,7 @@ var saveEvents = function () {
 // create event element and append to schedule element
 var createEvent = function (eventHour, eventText) {
   // create elements that make up an event item
-  var eventLi = $("<li>").addClass("time-block row col-12 mb-0 pt-1");
+  var eventLi = $("<li>").addClass("time-block row col-12 mb-0 mr-0 pr-0 h-100");
   eventLi.attr("data-id", eventHour);
   // set event hour format using moment (H AM/PM)
   var eventTime = moment(today, "L").set("hour", eventHour).format("h A");
@@ -44,9 +44,9 @@ var createEvent = function (eventHour, eventText) {
     )
     .text(eventTime);
   var eventP = $("<p>")
-    .addClass("description col-9 mb-0 mr-0 pt-2 text-left")
+    .addClass("description col-8 col-md-9 mb-0 mr-0 pt-2 pb-2 font-size-sm-10px text-left h-auto")
     .text(eventText);
-  var eventBtn = $("<button>").addClass("saveBtn col-1");
+  var eventBtn = $("<button>").addClass("saveBtn col-2 col-md-1");
   var eventBtnSpan = $("<span>").addClass("oi oi-hard-drive");
   eventBtnSpan.prop("title", "hard-drive");
   //   append button span to button
@@ -98,7 +98,7 @@ $("#schedule").on("click", "p", function () {
   // add highlight class to save button
   $(this).next(".saveBtn").addClass("btnActive");
   var text = $(this).text().trim();
-  var textInput = $("<textarea>").addClass("form-control col-9").val(text);
+  var textInput = $("<textarea>").addClass("form-control col-8 col-md-9").val(text);
   $(this).replaceWith(textInput);
   textInput.trigger("focus");
 });
@@ -111,7 +111,7 @@ $("#schedule").on("blur", "textarea", function () {
     $(this).next(".saveBtn").removeClass("btnActive");
   }
   var eventP = $("<p>")
-    .addClass("description col-9 mb-0 mr-0 pt-2 text-left")
+    .addClass("description col-8 col-md-9 mb-0 mr-0 pt-2 pb-2 font-size-sm-10px text-left h-auto")
     .text(text);
   $(this).replaceWith(eventP);
   setEventStatus($(eventP).closest(".time-block"));
