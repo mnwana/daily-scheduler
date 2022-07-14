@@ -1,9 +1,12 @@
 var events = [];
 var today = moment();
 
-// TODO: add header date using moment
-var updateHeader = function () {};
+// add date to header
+var updateHeader = function () {
+  $("#currentDay").text(today.format("dddd, MMMM Do YYYY"));
+};
 
+// load events to schedule
 var loadEvents = function () {
   // load events from local storage
   events = JSON.parse(localStorage.getItem("events"));
@@ -16,28 +19,31 @@ var loadEvents = function () {
   }
   // loop over array to populate schedule between 9 am and 5 pm
   for (var i = 0; i < events.length; i++) {
-    if (i >= 0 && i < 24) {
+    if (i >= 9 && i < 18) {
       createEvent(i, events[i]);
     }
   }
 };
 
+// save events to local storage
 var saveEvents = function () {
   // save events to local storage location
   localStorage.setItem("events", JSON.stringify(events));
 };
 
+// create event element and append to schedule element
 var createEvent = function (eventHour, eventText) {
   // create elements that make up an event item
   var eventLi = $("<li>").addClass("time-block row col-12 mb-0 pt-1");
-  //   TODO: set event hour format using moment (H AM/PM)
+  eventLi.attr("data-id",eventHour);
+  // set event hour format using moment (H AM/PM)
   var eventTime = moment(today, "L").set("hour", eventHour).format("h A");
   var eventSpan = $("<span>")
     .addClass(
-      "col-2 border-top border-right mb-0 border-3 border-grey rounded-0 hour"
+      "col-2 border-top border-right mb-0 border-3 border-grey rounded-0 hour pt-2"
     )
     .text(eventTime);
-  var eventP = $("<p>").addClass("description col-9 mb-0 mr-0").text(eventText);
+  var eventP = $("<p>").addClass("description col-9 mb-0 mr-0 pt-2 text-left").text(eventText);
   var eventBtn = $("<button>").addClass("saveBtn col-1");
   var eventBtnSpan = $("<span>").addClass("oi oi-hard-drive");
   eventBtnSpan.prop("title", "hard-drive");
@@ -51,11 +57,23 @@ var createEvent = function (eventHour, eventText) {
   $("#schedule").append(eventLi);
 };
 
+// set color of event description based on hour of day
 var setEventStatus = function (eventLi) {
   // get hour of event
   var hour = $(eventLi).find("span").text().trim();
-  var eventTime = moment(today, "L").set("hour", hour);
-
+  // reformat hour text to 24H format
+  var hourNum= parseInt(hour.slice(0,2).trim());
+  var dayPart = hour.slice(-2);
+  // if event is midnight, set to hour 0
+  if(hourNum==12){
+    hourNum=0;
+  }
+  // if event is PM add 12 hours to get 24H value
+  if(dayPart=="PM"){
+    hourNum+=12;
+  }
+  // set event time & date using event hour value
+  var eventTime = moment(today, "L").set("hour", hourNum);
   // remove event status classes
   var eventLiP = $(eventLi).find("p");
   eventLiP.removeClass("present future past");
@@ -94,7 +112,7 @@ $("#schedule").on("blur", "textarea", function () {
 
 // on save button click, save task to local storage
 $("#schedule").on("click", ".saveBtn", function () {
-  var index = $(this).closest(".time-block").index();
+  var index = $(this).closest(".time-block").attr("data-id");
   var text = $(this).siblings("p").text();
   events[index] = text;
   saveEvents();
