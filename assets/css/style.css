@@ -35,7 +35,7 @@ textarea {
 
 .row {
   white-space: pre-wrap;
-  height: 80px;
+  min-height: 60px;
   border-top: 1px solid white;
 }
 
