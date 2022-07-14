@@ -95,8 +95,8 @@ var setEventStatus = function (eventLi) {
 
 // on event text p click, open text area and highlight save button
 $("#schedule").on("click", "p", function () {
-    // add highlight class to save button
-    $(this).next('.saveBtn').addClass("btnActive");
+  // add highlight class to save button
+  $(this).next(".saveBtn").addClass("btnActive");
   var text = $(this).text().trim();
   var textInput = $("<textarea>").addClass("form-control col-9").val(text);
   $(this).replaceWith(textInput);
@@ -109,7 +109,9 @@ $("#schedule").on("blur", "textarea", function () {
   var index = $(this).closest(".time-block").index();
   events[index].text = text;
   saveEvents();
-  var eventP = $("<p>").addClass("description col-9 mb-0 mr-0 pt-2 text-left").text(text);
+  var eventP = $("<p>")
+    .addClass("description col-9 mb-0 mr-0 pt-2 text-left")
+    .text(text);
   $(this).replaceWith(eventP);
   setEventStatus($(eventP).closest(".time-block"));
 });
