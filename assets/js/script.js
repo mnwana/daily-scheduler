@@ -106,9 +106,10 @@ $("#schedule").on("click", "p", function () {
 //   on blurring event text text area, revert back to p & revert button color
 $("#schedule").on("blur", "textarea", function () {
   var text = $(this).val().trim();
-  var index = $(this).closest(".time-block").index();
-  events[index].text = text;
-  saveEvents();
+  var index = parseInt($(this).closest(".time-block").attr("data-id"));
+  if(events[index] == text){
+    $(this).next(".saveBtn").removeClass("btnActive");
+  }
   var eventP = $("<p>")
     .addClass("description col-9 mb-0 mr-0 pt-2 text-left")
     .text(text);
