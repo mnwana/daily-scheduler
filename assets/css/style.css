@@ -74,3 +74,7 @@ body {
   .border-3 {
     border-width:3px !important;
 }
+
+.btnActive {
+  background-color: #043c49;
+}

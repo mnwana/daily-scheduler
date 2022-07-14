@@ -35,7 +35,7 @@ var saveEvents = function () {
 var createEvent = function (eventHour, eventText) {
   // create elements that make up an event item
   var eventLi = $("<li>").addClass("time-block row col-12 mb-0 pt-1");
-  eventLi.attr("data-id",eventHour);
+  eventLi.attr("data-id", eventHour);
   // set event hour format using moment (H AM/PM)
   var eventTime = moment(today, "L").set("hour", eventHour).format("h A");
   var eventSpan = $("<span>")
@@ -43,7 +43,9 @@ var createEvent = function (eventHour, eventText) {
       "col-2 border-top border-right mb-0 border-3 border-grey rounded-0 hour pt-2"
     )
     .text(eventTime);
-  var eventP = $("<p>").addClass("description col-9 mb-0 mr-0 pt-2 text-left").text(eventText);
+  var eventP = $("<p>")
+    .addClass("description col-9 mb-0 mr-0 pt-2 text-left")
+    .text(eventText);
   var eventBtn = $("<button>").addClass("saveBtn col-1");
   var eventBtnSpan = $("<span>").addClass("oi oi-hard-drive");
   eventBtnSpan.prop("title", "hard-drive");
@@ -62,15 +64,15 @@ var setEventStatus = function (eventLi) {
   // get hour of event
   var hour = $(eventLi).find("span").text().trim();
   // reformat hour text to 24H format
-  var hourNum= parseInt(hour.slice(0,2).trim());
+  var hourNum = parseInt(hour.slice(0, 2).trim());
   var dayPart = hour.slice(-2);
   // if event is midnight, set to hour 0
-  if(hourNum==12){
-    hourNum=0;
+  if (hourNum == 12) {
+    hourNum = 0;
   }
   // if event is PM add 12 hours to get 24H value
-  if(dayPart=="PM"){
-    hourNum+=12;
+  if (dayPart == "PM") {
+    hourNum += 12;
   }
   // set event time & date using event hour value
   var eventTime = moment(today, "L").set("hour", hourNum);
@@ -91,21 +93,23 @@ var setEventStatus = function (eventLi) {
   }
 };
 
-// on event text p click, open text area
+// on event text p click, open text area and highlight save button
 $("#schedule").on("click", "p", function () {
+    // add highlight class to save button
+    $(this).next('.saveBtn').addClass("btnActive");
   var text = $(this).text().trim();
   var textInput = $("<textarea>").addClass("form-control col-9").val(text);
   $(this).replaceWith(textInput);
   textInput.trigger("focus");
 });
 
-//   on blurring event text text area, revert back to p
+//   on blurring event text text area, revert back to p & revert button color
 $("#schedule").on("blur", "textarea", function () {
   var text = $(this).val().trim();
   var index = $(this).closest(".time-block").index();
   events[index].text = text;
   saveEvents();
-  var eventP = $("<p>").addClass("description col-9 mb-0 mr-0").text(text);
+  var eventP = $("<p>").addClass("description col-9 mb-0 mr-0 pt-2 text-left").text(text);
   $(this).replaceWith(eventP);
   setEventStatus($(eventP).closest(".time-block"));
 });
@@ -116,6 +120,8 @@ $("#schedule").on("click", ".saveBtn", function () {
   var text = $(this).siblings("p").text();
   events[index] = text;
   saveEvents();
+  // remove highlight class from save button
+  $(this).closest(".time-block").find(".saveBtn").removeClass("btnActive");
 });
 
 // set header date & load schedule to initialize page
