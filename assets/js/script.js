@@ -34,24 +34,29 @@ var saveEvents = function () {
 // create event element and append to schedule element
 var createEvent = function (eventHour, eventText) {
   // create elements that make up an event item
-  var eventLi = $("<li>").addClass("time-block row col-12 mb-0 mr-0 pr-0 h-sm-100 pt-1");
+  var eventLi = $("<li>").addClass(
+    "time-block row col-12 mb-0 mr-0 pr-0 h-sm-100 pt-1"
+  );
   eventLi.attr("data-id", eventHour);
   // set event hour format using moment (H AM/PM)
   var eventTime = moment(today, "L").set("hour", eventHour).format("h A");
+  // create event elements span, p, button and span for use in button
   var eventSpan = $("<span>")
     .addClass(
       "col-2 border-top border-right mb-0 border-3 border-grey rounded-0 hour pt-2"
     )
     .text(eventTime);
   var eventP = $("<p>")
-    .addClass("description col-8 col-md-9 mb-0 mr-0 pt-2 pb-2 text-left h-sm-auto")
+    .addClass(
+      "description col-8 col-md-9 mb-0 mr-0 pt-2 pb-2 text-left h-sm-auto"
+    )
     .text(eventText);
   var eventBtn = $("<button>").addClass("saveBtn col-2 col-md-1");
   var eventBtnSpan = $("<span>").addClass("oi oi-hard-drive");
   eventBtnSpan.prop("title", "hard-drive");
   //   append button span to button
-  // append hour p, and description p, and button element to parent
   eventBtn.append(eventBtnSpan);
+  // append hour p, and description p, and button element to parent
   eventLi.append(eventSpan, eventP, eventBtn);
   // set color of event based on current time
   setEventStatus(eventLi);
@@ -93,13 +98,17 @@ var setEventStatus = function (eventLi) {
   }
 };
 
-// on event text p click, open text area and highlight save button
+// on event text p click, open text area and highlight save button as active
 $("#schedule").on("click", "p", function () {
   // add highlight class to save button
   $(this).next(".saveBtn").addClass("btnActive");
   var text = $(this).text().trim();
-  var textInput = $("<textarea>").addClass("form-control col-8 col-md-9").val(text);
+  // replace p with text area consisting of text
+  var textInput = $("<textarea>")
+    .addClass("form-control col-8 col-md-9")
+    .val(text);
   $(this).replaceWith(textInput);
+  // trigger focus
   textInput.trigger("focus");
 });
 
@@ -107,20 +116,25 @@ $("#schedule").on("click", "p", function () {
 $("#schedule").on("blur", "textarea", function () {
   var text = $(this).val().trim();
   var index = parseInt($(this).closest(".time-block").attr("data-id"));
-  if(events[index] == text){
+  // if the text has not changed, remove active status for save
+  if (events[index] == text) {
     $(this).next(".saveBtn").removeClass("btnActive");
   }
+  // replace text area with p consisting of text
   var eventP = $("<p>")
     .addClass("description col-8 col-md-9 mb-0 mr-0 pt-2 pb-2 text-left h-auto")
     .text(text);
   $(this).replaceWith(eventP);
+  // update event status for new p
   setEventStatus($(eventP).closest(".time-block"));
 });
 
 // on save button click, save task to local storage
 $("#schedule").on("click", ".saveBtn", function () {
+  // get data id for time block & read text
   var index = $(this).closest(".time-block").attr("data-id");
   var text = $(this).siblings("p").text();
+  // set array text at index to have new text value & save to local storage
   events[index] = text;
   saveEvents();
   // remove highlight class from save button
